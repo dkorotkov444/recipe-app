@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+# (Excludes my specific environment folder)
+a2-ve-recipeapp/
+venv/
+env/
+ENV/
+
+# Databases
+# (I don't want to track my local SQLite data)
+*.sqlite3
+
+# Django-specific
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media and Static
+media/
+staticfiles/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
