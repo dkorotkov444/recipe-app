@@ -29,3 +29,7 @@ Thumbs.db
 
 # VS Code settings
 .vscode/
+
+# Text backup files
+*.bak
+*.tmp
