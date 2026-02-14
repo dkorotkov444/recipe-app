@@ -11,10 +11,11 @@ class RecipeModelTest(TestCase):
     def setUpTestData(cls):
         # Create a base recipe for all tests in this class
         cls.recipe = Recipe.objects.create(name="Tea", cooking_time=5)
+        cls.recipe.calculate_difficulty()   # Ensure difficulty is set based on initial data
 
     def test_initial_difficulty_easy(self):
         """A new recipe with short time and 0 ingredients should be easy."""
-        self.recipe.save()
+        self.recipe.refresh_from_db()
         self.assertEqual(self.recipe.difficulty, 'easy')
 
     def test_difficulty_updates_on_time_change(self):
@@ -80,7 +81,7 @@ class RecipeIngredientModelTest(TestCase):
 
     def test_cascade_delete_recipe(self):
         """Test that deleting a recipe removes its entries in the junction table."""
-        RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredient)
+        RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredients[0])
         self.recipe.delete()
         self.assertEqual(RecipeIngredient.objects.count(), 0)
 

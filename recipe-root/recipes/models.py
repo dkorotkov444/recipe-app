@@ -32,12 +32,18 @@ class Recipe(models.Model):
         self.save(update_fields=['difficulty'])     # Save only the updated difficulty field to prevent recursion
     
     def save(self, *args, **kwargs):
-        # If the recipe already exists in DB, we can update difficulty based on current time
-        if self.pk: 
-            # Note: count() is only accurate if ingredients are already linked
-            self.calculate_difficulty() 
+        # If the recipe already exists in DB, we can update difficulty based on cooking_time
+        update_fields = kwargs.get('update_fields', None)   # Grab 'update_fields' from the arguments if it exists
+
+        # Only calculate difficulty if:
+        #    - The object already exists (self.pk)
+        #    - AND we aren't ALREADY just updating the difficulty (to prevent loop)
+        if self.pk and (update_fields is None or 'difficulty' not in update_fields):
+            self.calculate_difficulty()
+
         super().save(*args, **kwargs)
 
+    # String representation
     def __str__(self):
         return f"Recipe ID: {self.id} | Name: {self.name} | Difficulty: {self.difficulty}"
     
@@ -58,5 +64,6 @@ class RecipeIngredient(models.Model):
         super().delete(*args, **kwargs)         # Delete the recipe-ingredient link
         temp_recipe.calculate_difficulty()      # Tells the linked recipe to update its difficulty after deletion
 
+    # String representation
     def __str__(self):
         return f"Recipe: {self.recipe.name} | Ingredient: {self.ingredient.name}"

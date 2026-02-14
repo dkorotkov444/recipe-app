@@ -9,5 +9,6 @@ class Ingredient(models.Model):
         self.name = self.name.strip().lower()   # Remove leading/trailing whitespace and convert to lowercase
         super().save(*args, **kwargs)           # Call the original save method
 
+    # String representation
     def __str__(self):
         return f"Ingredient: {self.name}"
