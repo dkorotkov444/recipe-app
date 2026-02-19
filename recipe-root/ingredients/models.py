@@ -4,6 +4,7 @@ from django.db import models
 # Ingredients models
 class Ingredient(models.Model):
     name = models.CharField(max_length=128, unique=True, null=False, blank=False)
+    image = models.ImageField(upload_to='ingredients/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.name = self.name.strip().lower()   # Remove leading/trailing whitespace and convert to lowercase

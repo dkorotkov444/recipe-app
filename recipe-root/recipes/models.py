@@ -13,6 +13,7 @@ class Recipe(models.Model):
     name = models.CharField(max_length=128, unique=True, null=False, blank=False)
     cooking_time = models.PositiveIntegerField(help_text='in minutes')
     difficulty = models.CharField(max_length=20, editable=False)
+    image = models.ImageField(upload_to='recipes/', null=True, blank=True, default='no_image.png')
 
     # Link to the ingredients app's model using a string reference.
     # No import of the Ingredient model helps to avoid circular import issues.
