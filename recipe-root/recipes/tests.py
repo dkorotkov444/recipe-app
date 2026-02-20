@@ -2,6 +2,8 @@
 from django.test import TestCase
 from .models import Recipe, RecipeIngredient
 from ingredients.models import Ingredient
+from django.urls import reverse
+from django.utils.html import escape
 
 
 # Create your tests here.
@@ -93,3 +95,38 @@ class RecipeIngredientModelTest(TestCase):
         )
         expected_str = f"Recipe: {self.recipe.name} | Ingredient: {self.ingredients[0].name}"
         self.assertEqual(str(link), expected_str)
+
+
+class RecipeViewsTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.recipe1 = Recipe.objects.create(name="Soup", cooking_time=12)
+        cls.recipe2 = Recipe.objects.create(name="Cake", cooking_time=30)
+
+    def test_recipes_list_view_status_and_template(self):
+        url = reverse('recipes:recipes_list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/recipes_list.html')
+        # Check both recipes are in the context
+        self.assertContains(response, self.recipe1.name)
+        self.assertContains(response, self.recipe2.name)
+
+    def test_recipe_detail_view_status_and_template(self):
+        url = reverse('recipes:recipe_detail', args=[self.recipe1.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/recipe_detail.html')
+        self.assertContains(response, self.recipe1.name)
+        self.assertContains(response, str(self.recipe1.cooking_time))
+
+    def test_recipe_detail_view_404(self):
+        url = reverse('recipes:recipe_detail', args=[9999])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_recipe_list_links_to_detail(self):
+        url = reverse('recipes:recipes_list')
+        response = self.client.get(url)
+        detail_url = reverse('recipes:recipe_detail', args=[self.recipe1.pk])
+        self.assertContains(response, escape(detail_url))

@@ -2,6 +2,8 @@
 from django.test import TestCase
 from django.db import IntegrityError
 from .models import Ingredient
+from django.urls import reverse
+
 
 # Create your tests here.
 class IngredientModelTest(TestCase):
@@ -42,3 +44,24 @@ class IngredientModelTest(TestCase):
     def test_str_method(self):
         """Test the string representation."""
         self.assertEqual(str(self.ingredient), "Ingredient: salt")
+
+
+class IngredientViewsTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.ingredient1 = Ingredient.objects.create(name="apple")
+        cls.ingredient2 = Ingredient.objects.create(name="banana")
+
+    def test_ingredient_index_view_status_and_template(self):
+        url = reverse('ingredients:ingredients_index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ingredients/ingredients_index.html')
+        self.assertContains(response, self.ingredient1.name)
+        self.assertContains(response, self.ingredient2.name)
+
+    def test_ingredient_index_recipe_count(self):
+        url = reverse('ingredients:ingredients_index')
+        response = self.client.get(url)
+        # Should show recipe_count for each ingredient (should be 0 here)
+        self.assertContains(response, '0')
