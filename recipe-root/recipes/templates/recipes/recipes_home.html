@@ -16,6 +16,34 @@
         color: white;
         text-align: center;
     }
+
+    /* Added styles for the requested elements */
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 4.5rem;
+        font-weight: 900;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .btn-gastronomy {
+        background-color: #e67e22;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-gastronomy:hover {
+        background-color: #d35400;
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
     .feature-card { border: none; border-radius: 15px; transition: 0.3s; }
     .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
 </style>
@@ -24,11 +52,9 @@
 {% block content %}
 <header class="hero-section">
     <div class="container">
-        <h1 class="display-2 fw-bold mb-4" style="font-family: 'Playfair Display';">Master Your Kitchen</h1>
-        <p class="lead mb-5 fs-4">Discover, organize, and cook world-class recipes with ease.</p>
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-            <a href="{% url 'recipes:recipes_list' %}" class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow">Explore Recipes</a>
-        </div>
+        <h1 class="hero-title mb-3">Recipe Application</h1>
+        <p class="lead mb-5 fs-3">Discover, create, and share the art of gastronomy.</p>
+        <a href="{% url 'recipes:recipes_list' %}" class="btn btn-gastronomy btn-lg">Explore Recipes</a>
     </div>
 </header>
 

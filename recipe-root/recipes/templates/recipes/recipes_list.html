@@ -1,12 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}Explore Recipes | Recipe Application{% endblock %}
+{% block title %}Explore Recipes | Gastronomy App{% endblock %}
 
 {% block extra_css %}
 <style>
+    body { font-family: 'Lato', sans-serif; background-color: #f8f9fa; }
     .section-title { font-family: 'Playfair Display', serif; font-weight: 700; color: #2c3e50; }
-    .recipe-card { transition: transform 0.3s ease; border: none; border-radius: 15px; overflow: hidden; height: 100%; }
+    
+    .recipe-card { 
+        transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        border: none; 
+        border-radius: 15px; 
+        overflow: hidden; 
+        height: 100%; 
+        position: relative; 
+    }
     .recipe-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    
+    .img-container { position: relative; }
+
+    /* Difficulty Pill Overlay */
+    .difficulty-pill {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: white;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .diff-easy { background-color: #27ae60; }
+    .diff-medium { background-color: #f39c12; }
+    .diff-hard { background-color: #e74c3c; }
+
     .btn-view { background-color: #2c3e50; color: white; border-radius: 8px; font-weight: 600; }
     .btn-view:hover { background-color: #e67e22; color: white; }
 </style>
@@ -30,23 +61,28 @@
         {% for recipe in recipes %}
         <div class="col-md-6 col-lg-4">
             <div class="card recipe-card shadow-sm">
-                {% if recipe.image %}
-                    <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                    <img src="/media/no_image.png" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
-                {% endif %}
+                <div class="img-container">
+                    <span class="difficulty-pill diff-{{ recipe.difficulty }}">
+                        {{ recipe.difficulty }}
+                    </span>
+
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="/media/no_image.png" class="card-img-top" alt="Default Recipe Image" style="height: 250px; object-fit: cover;">
+                    {% endif %}
+                </div>
+
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title fw-bold">{{ recipe.name }}</h4>
-                    <p class="text-muted small">Ready in <strong>{{ recipe.cooking_time }} mins</strong></p>
+                    <h4 class="card-title fw-bold mb-2">{{ recipe.name }}</h4>
+                    <p class="text-muted small mb-3">
+                        Ready in <strong>{{ recipe.cooking_time }} minutes</strong>
+                    </p>
                     <div class="mt-auto d-grid">
-                        <a href="{% url 'recipes:recipe_detail' recipe.pk %}" class="btn btn-view">View Details</a>
+                        <a href="{% url 'recipes:recipe_detail' recipe.pk %}" class="btn btn-view py-2">View Details</a>
                     </div>
                 </div>
             </div>
-        </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <p class="lead text-muted">No recipes found matching your search.</p>
         </div>
         {% endfor %}
     </div>

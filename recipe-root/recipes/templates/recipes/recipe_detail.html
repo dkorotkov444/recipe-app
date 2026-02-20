@@ -4,6 +4,7 @@
 
 {% block extra_css %}
 <style>
+    body { font-family: 'Lato', sans-serif; background-color: #fcfcfc; }
     .recipe-header {
         height: 50vh;
         background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
@@ -16,7 +17,7 @@
         padding-bottom: 3rem;
         margin-bottom: 3rem;
     }
-    .recipe-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+    .recipe-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
     .meta-card { border-radius: 15px; border: none; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     .ingredient-item { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; }
 </style>
@@ -42,18 +43,35 @@
                     <small class="text-uppercase text-muted fw-bold d-block mb-1">Difficulty</small>
                     <span class="h5 mb-0 text-capitalize">{{ recipe.difficulty }}</span>
                 </div>
+                <div class="vr"></div>
+                <div>
+                    <small class="text-uppercase text-muted fw-bold d-block mb-1">Ingredients</small>
+                    <span class="h5 mb-0">{{ recipe.ingredients.count }} items</span>
+                </div>
             </div>
 
             <h3 class="mb-4 mt-5" style="font-family: 'Playfair Display';">Ingredients</h3>
-            <div class="bg-white p-4 rounded shadow-sm">
+            <div class="bg-white p-4 rounded shadow-sm border">
                 {% for item in recipe.ingredients.all %}
                 <div class="ingredient-item">
-                    <span class="badge rounded-circle bg-light text-dark me-3">•</span>
+                    <span class="badge rounded-circle bg-light text-dark me-3 border">•</span>
                     <span class="text-capitalize">{{ item.name }}</span>
                 </div>
                 {% empty %}
-                <p class="text-muted italic">No ingredients listed.</p>
+                <p class="text-muted italic">No ingredients listed for this recipe.</p>
                 {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-4 bg-light">
+                <h5 class="fw-bold mb-3" style="color: #e67e22;">Chef's Note</h5>
+                <p class="small text-muted">
+                    This recipe's difficulty was automatically calculated as <strong>{{ recipe.difficulty }}</strong> 
+                    based on its preparation time and the complexity of its ingredient list.
+                </p>
+                <hr>
+                <p class="small mb-0">ID: {{ recipe.id }}</p>
             </div>
         </div>
     </div>
