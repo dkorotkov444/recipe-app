@@ -1,4 +1,4 @@
-# recpes/urls.py
+# recipes/urls.py
 from django.urls import path
 from .views import home
 
