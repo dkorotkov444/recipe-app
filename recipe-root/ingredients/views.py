@@ -9,7 +9,7 @@ class IngredientsIndexView(ListView):
     template_name = 'ingredients/ingredients_index.html'
     context_object_name = 'ingredients'
 
-# Override the get_queryset method to annotate each ingredient with the count of recipes that use it
-def get_queryset(self):
-        # We fetch ingredients and count how many recipes use them
-        return Ingredient.objects.annotate(recipe_count=Count('recipes')).order_by('name')
+    # Override the get_queryset method to annotate each ingredient with the count of recipes that use it
+    def get_queryset(self):
+            # We fetch ingredients and count how many recipes use them
+            return Ingredient.objects.annotate(recipe_count=Count('recipes')).order_by('name')
