@@ -1,7 +1,7 @@
 # recipes/views.py
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView      # Import ListView and DetailView for class-based views
-from .models import Recipe
+from recipes.models import Recipe
 
 # Homepage view
 def home(request):
