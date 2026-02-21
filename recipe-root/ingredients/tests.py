@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.db import IntegrityError
 from .models import Ingredient
 from django.urls import reverse
-
+from django.contrib.auth.models import User # Added for auth
 
 # --- Models tests ---
 class IngredientModelTest(TestCase):
@@ -49,13 +49,17 @@ class IngredientModelTest(TestCase):
 class IngredientViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='testchef', password='password123')    # Create a test user
         cls.ingredient1 = Ingredient.objects.create(name="apple")
         cls.ingredient2 = Ingredient.objects.create(name="banana")
+
+    def setUp(self):
+        self.client.login(username='testchef', password='password123')  # Log in the user before each test
 
     def test_ingredient_index_view_status_and_template(self):
         url = reverse('ingredients:ingredients_index')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)     # Now returns 200 because we are logged in
         self.assertTemplateUsed(response, 'ingredients/ingredients_index.html')
         self.assertContains(response, self.ingredient1.name)
         self.assertContains(response, self.ingredient2.name)
