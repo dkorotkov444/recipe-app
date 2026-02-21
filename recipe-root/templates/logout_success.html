@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Logged Out | Recipe Application{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 50px auto;
+        text-align: center;
+    }
+    .logout-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .btn-relogin {
+        background-color: #e67e22;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .btn-relogin:hover {
+        background-color: #d35400;
+        color: white;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="success-container">
+        <h1 class="mb-4" style="font-family: 'Playfair Display', serif; font-weight: 900;">Successfully Logged Out</h1>
+        
+        <img src="/media/syrniki.jpg" alt="Delicious Syrniki" class="logout-image">
+        
+        <p class="lead mb-5 text-muted">You have been securely logged out. We hope to see you back in the kitchen soon!</p>
+        
+        <div class="mt-4">
+            <a href="{% url 'login' %}" class="btn-relogin">Log Back In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

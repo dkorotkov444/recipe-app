@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Recipe Application{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 450px;
+        margin: 100px auto;
+    }
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .btn-login {
+        background-color: #e67e22;
+        color: white;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 12px;
+        transition: 0.3s;
+    }
+    .btn-login:hover {
+        background-color: #d35400;
+        color: white;
+    }
+    .form-control:focus {
+        border-color: #e67e22;
+        box-shadow: 0 0 0 0.25rem rgba(230, 126, 34, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="login-container">
+        <div class="card p-4">
+            <div class="card-body text-center">
+                <h2 class="mb-4" style="font-family: 'Playfair Display', serif; font-weight: 900;">Welcome Back</h2>
+                
+                {% if error_message %}
+                <div class="alert alert-danger small">{{ error_message }}</div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="text-start mb-3">
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-login w-100 mt-3">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

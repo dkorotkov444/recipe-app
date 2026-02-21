@@ -1,3 +1,4 @@
+# recipe-project/urls.py
 """
 URL configuration for recipe-project project.
 
@@ -24,19 +25,17 @@ from .views import login_view, logout_view, home
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # Homepage (Project-level)
+    # Homepage at the root: http://127.0.0.1:8000/
     path('', home, name='home'),
 
     # Authentication
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
-
-    # Logout Success (using TemplateView for the global template)
     path('logout-success/', 
          TemplateView.as_view(template_name='logout_success.html'), 
          name='logout_success'),
 
-# App-specific URLs
+    # App-specific URLs
     path('recipes/', include('recipes.urls')),
     path('ingredients/', include('ingredients.urls')),]
 
