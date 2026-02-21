@@ -56,7 +56,7 @@ recipe-app/
 │   │           ├── recipes_home.html
 │   │           ├── recipes_list.html
 │   │           └── recipe_detail.html
-│   └── recipe_project/      # Django project config
+│   └── recipe-project/      # Django project config
 │       ├── asgi.py
 │       ├── settings.py
 │       ├── urls.py
@@ -64,7 +64,7 @@ recipe-app/
 ```
 
 - The `recipes` and `ingredients` folders are Django apps with their own models, views, urls, templates, and migrations.
-- The `recipe_project` folder contains the main Django project configuration.
+- The `recipe-project` folder contains the main Django project configuration.
 - The database file (`db.sqlite3`) is for development; production should use PostgreSQL.
 
 ## Setup and Installation
