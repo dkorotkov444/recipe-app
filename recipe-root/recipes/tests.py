@@ -4,9 +4,9 @@ from .models import Recipe, RecipeIngredient
 from ingredients.models import Ingredient
 from django.urls import reverse
 from django.utils.html import escape
+from django.contrib.auth.models import User     # Added for auth testing
 
-
-# Create your tests here.
+# --- Models tests ---
 
 class RecipeModelTest(TestCase):
     @classmethod
@@ -31,7 +31,6 @@ class RecipeModelTest(TestCase):
         """Check if the __str__ method outputs the expected format with preserved casing."""
         expected_str = f"Recipe ID: {self.recipe.id} | Name: Tea | Difficulty: easy"
         self.assertEqual(str(self.recipe), expected_str)
-
 
 class RecipeIngredientModelTest(TestCase):
     @classmethod
@@ -96,12 +95,17 @@ class RecipeIngredientModelTest(TestCase):
         expected_str = f"Recipe: {self.recipe.name} | Ingredient: {self.ingredients[0].name}"
         self.assertEqual(str(link), expected_str)
 
-
+# --- Views tests ---
 class RecipeViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='testuser', password='testpassword123')    # Create a test user
         cls.recipe1 = Recipe.objects.create(name="Soup", cooking_time=12)
         cls.recipe2 = Recipe.objects.create(name="Cake", cooking_time=30)
+    
+    def setUp(self):
+        # Log the user in before every view test that requires authentication
+        self.client.login(username='testuser', password='testpassword123')
 
     def test_recipes_list_view_status_and_template(self):
         url = reverse('recipes:recipes_list')

@@ -5,7 +5,7 @@ from .models import Ingredient
 from django.urls import reverse
 
 
-# Create your tests here.
+# --- Models tests ---
 class IngredientModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -45,7 +45,7 @@ class IngredientModelTest(TestCase):
         """Test the string representation."""
         self.assertEqual(str(self.ingredient), "Ingredient: salt")
 
-
+# --- Views tests ---
 class IngredientViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
