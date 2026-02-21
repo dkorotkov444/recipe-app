@@ -1,6 +1,6 @@
 # ingredients/urls.py
 from django.urls import path
-from ingredients.views import IngredientsIndexView
+from .views import IngredientsIndexView
 
 app_name = 'ingredients'
 

@@ -18,12 +18,27 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from .views import login_view, logout_view, home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('recipes.urls')),
-    path('ingredients/', include('ingredients.urls')),
-]
+
+    # Homepage (Project-level)
+    path('', home, name='home'),
+
+    # Authentication
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+
+    # Logout Success (using TemplateView for the global template)
+    path('logout-success/', 
+         TemplateView.as_view(template_name='logout_success.html'), 
+         name='logout_success'),
+
+# App-specific URLs
+    path('recipes/', include('recipes.urls')),
+    path('ingredients/', include('ingredients.urls')),]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

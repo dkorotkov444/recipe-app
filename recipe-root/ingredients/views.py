@@ -1,6 +1,6 @@
 # ingredients/views.py
 from django.views.generic import ListView      # Import ListView and DetailView for class-based views
-from ingredients.models import Ingredient
+from .models import Ingredient
 from django.db.models import Count
 
 # Class based view for listing ingredients

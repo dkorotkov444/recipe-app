@@ -4,10 +4,6 @@ from django.views.generic import ListView, DetailView      # Import ListView and
 from django.contrib.auth.mixins import LoginRequiredMixin # For protecting Class-based views
 from .models import Recipe
 
-# Homepage view
-def home(request):
-    return render(request, 'recipes/recipes_home.html')
-
 # Class-based views for listing recipes and showing recipe details
 class RecipesListView(LoginRequiredMixin, ListView):          # class-based view to display a list of recipes
     model = Recipe                        # specify the model to use for this view

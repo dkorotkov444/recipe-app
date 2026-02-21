@@ -3,6 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
+# --- Project-level Homepage View ---
+def home(request):
+    return render(request, 'home.html')
+
+# Function-based authorization views
 # 1. Login View
 def login_view(request):
     error_message = None
