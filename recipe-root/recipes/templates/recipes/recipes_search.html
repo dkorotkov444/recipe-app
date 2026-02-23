@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Recipe Data Lab | Search{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-card { border-radius: 15px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .dataframe { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .dataframe th { background-color: #343a40; color: white; padding: 12px; text-align: left; }
+    .dataframe td { padding: 12px; border-bottom: 1px solid #dee2e6; }
+    .dataframe tr:hover { background-color: #f8f9fa; }
+    .chart-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class=\"container py-5\">
+    <div class=\"row justify-content-center mb-5\">
+        <div class=\"col-md-8\">
+            <div class=\"card search-card p-4\">
+                <h2 class=\"text-center mb-4\" style=\"font-family: 'Playfair Display';\">Recipe Data Lab</h2>
+                <form action=\"\" method=\"POST\">
+                    {% csrf_token %}
+                    <div class=\"row g-3\">
+                        <div class=\"col-md-6\">
+                            {{ form.recipe_name.label_tag }}
+                            {{ form.recipe_name }}
+                        </div>
+                        <div class=\"col-md-4\">
+                            {{ form.chart_type.label_tag }}
+                            {{ form.chart_type }}
+                        </div>
+                        <div class=\"col-md-2 d-flex align-items-end\">
+                            <button type=\"submit\" class=\"btn btn-dark w-100\">Analyze</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if recipes_df %}
+        <div class=\"row\">
+            <div class=\"col-12\">
+                <h3 class=\"mb-3\">Search Results</h3>
+                <div class=\"table-responsive\">
+                    {# We use |safe because the DataFrame contains our injected HTML links #}
+                    {{ recipes_df|safe }}
+                </div>
+            </div>
+        </div>
+
+        {% if chart %}
+            <div class=\"row justify-content-center\">
+                <div class=\"col-md-10\">
+                    <div class=\"chart-container\">
+                        <h4 class=\"mb-4\">Data Visualization</h4>
+                        <img src=\"data:image/png;base64,{{ chart|safe }}\" alt=\"Recipe Analysis Chart\" class=\"img-fluid\">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        {% if request.method == 'POST' %}
+            <div class=\"alert alert-warning text-center\">
+                No recipes found matching your criteria. Try a different search term.
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
