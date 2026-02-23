@@ -14,24 +14,24 @@
 {% endblock %}
 
 {% block content %}
-<div class=\"container py-5\">
-    <div class=\"row justify-content-center mb-5\">
-        <div class=\"col-md-8\">
-            <div class=\"card search-card p-4\">
-                <h2 class=\"text-center mb-4\" style=\"font-family: 'Playfair Display';\">Recipe Data Lab</h2>
-                <form action=\"\" method=\"POST\">
+<div class="container py-5">
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card search-card p-4">
+                <h2 class="text-center mb-4" style="font-family: 'Playfair Display';">Recipe Data Lab</h2>
+                <form action="" method="POST">
                     {% csrf_token %}
-                    <div class=\"row g-3\">
-                        <div class=\"col-md-6\">
+                    <div class="row g-3">
+                        <div class="col-md-6">
                             {{ form.recipe_name.label_tag }}
                             {{ form.recipe_name }}
                         </div>
-                        <div class=\"col-md-4\">
+                        <div class="col-md-4">
                             {{ form.chart_type.label_tag }}
                             {{ form.chart_type }}
                         </div>
-                        <div class=\"col-md-2 d-flex align-items-end\">
-                            <button type=\"submit\" class=\"btn btn-dark w-100\">Analyze</button>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-dark w-100">Analyze</button>
                         </div>
                     </div>
                 </form>
@@ -40,10 +40,10 @@
     </div>
 
     {% if recipes_df %}
-        <div class=\"row\">
-            <div class=\"col-12\">
-                <h3 class=\"mb-3\">Search Results</h3>
-                <div class=\"table-responsive\">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-3">Search Results</h3>
+                <div class="table-responsive">
                     {# We use |safe because the DataFrame contains our injected HTML links #}
                     {{ recipes_df|safe }}
                 </div>
@@ -51,18 +51,18 @@
         </div>
 
         {% if chart %}
-            <div class=\"row justify-content-center\">
-                <div class=\"col-md-10\">
-                    <div class=\"chart-container\">
-                        <h4 class=\"mb-4\">Data Visualization</h4>
-                        <img src=\"data:image/png;base64,{{ chart|safe }}\" alt=\"Recipe Analysis Chart\" class=\"img-fluid\">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="chart-container">
+                        <h4 class="mb-4">Data Visualization</h4>
+                        <img src="data:image/png;base64,{{ chart|safe }}" alt="Recipe Analysis Chart" class="img-fluid">
                     </div>
                 </div>
             </div>
         {% endif %}
     {% else %}
         {% if request.method == 'POST' %}
-            <div class=\"alert alert-warning text-center\">
+            <div class="alert alert-warning text-center">
                 No recipes found matching your criteria. Try a different search term.
             </div>
         {% endif %}
