@@ -4,12 +4,46 @@
 
 {% block extra_css %}
 <style>
-    .search-card { border-radius: 15px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     .dataframe { width: 100%; border-collapse: collapse; margin-top: 20px; }
     .dataframe th { background-color: #343a40; color: white; padding: 12px; text-align: left; }
     .dataframe td { padding: 12px; border-bottom: 1px solid #dee2e6; }
     .dataframe tr:hover { background-color: #f8f9fa; }
     .chart-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; text-align: center; }
+
+    .search-card { border-radius: 20px; border: 1px solid #eee; }
+    
+    /* Targets the Django form widgets specifically */
+    .search-card input, .search-card select {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    .search-card input:focus, .search-card select:focus {
+        border-color: #343a40;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.1);
+    }
+
+    .btn-analyze {
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: 0.3s;
+    }
+
+    .btn-analyze:hover {
+        background-color: #e67e22;
+        border-color: #e67e22;
+    }
+
 </style>
 {% endblock %}
 
@@ -17,24 +51,26 @@
 <div class="container py-5">
     <div class="row justify-content-center mb-5">
         <div class="col-md-8">
-            <div class="card search-card p-4">
-                <h2 class="text-center mb-4" style="font-family: 'Playfair Display';">Recipe Data Lab</h2>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            {{ form.recipe_name.label_tag }}
-                            {{ form.recipe_name }}
+            <div class="card search-card p-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center mb-4" style="font-family: 'Playfair Display'; font-weight: 700;">Recipe Data Lab</h2>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-5">
+                                {{ form.recipe_name.label_tag }}
+                                {{ form.recipe_name }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.chart_type.label_tag }}
+                                {{ form.chart_type }}
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="submit" class="btn btn-dark btn-analyze py-2">Analyze</button>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            {{ form.chart_type.label_tag }}
-                            {{ form.chart_type }}
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-dark w-100">Analyze</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

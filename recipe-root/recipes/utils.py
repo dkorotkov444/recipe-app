@@ -26,7 +26,7 @@ def get_chart(chart_type, data, **kwargs):
     if chart_type == '#1':
         # Bar Chart: Cooking Time Comparison
         plt.bar(data['name'], data['cooking_time'], color='#e67e22')
-        plt.xlabel('Recipe Name')
+        #plt.xlabel('Recipe Name')
         plt.ylabel('Cooking Time (min)')
         plt.title('Cooking Time Comparison')
 
@@ -43,7 +43,7 @@ def get_chart(chart_type, data, **kwargs):
         # This assumes 'ingredient_count' was added to the dataframe in the view
         plt.plot(data['name'], data['cooking_time'], marker='o', label='Cooking Time')
         plt.plot(data['name'], data['ingredient_count'], marker='s', label='Ingredient Count')
-        plt.xlabel('Recipes')
+        #plt.xlabel('Recipes')
         plt.title('Complexity Trends')
         plt.legend()
     
