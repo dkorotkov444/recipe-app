@@ -46,20 +46,23 @@
 {% block content %}
 <div class="container py-5">
     <div class="row mb-5 align-items-center">
+
         <div class="col-md-7">
             <h1 class="section-title display-5">Our Recipe Collection</h1>
         </div>
+
         <div class="col-md-5">
-            <form method="get" action="{% url 'recipes:recipes_list' %}" class="d-flex">
-                <input type="text" name="recipe_name" class="form-control me-2" placeholder="Search by name..." value="{{ request.GET.recipe_name }}">
-                <button type="submit" class="btn btn-dark">Search</button>
-            </form>
+            <div class="d-flex justify-content-md-end">
+                <input type="text" id="recipeSearch" class="form-control w-75 me-2" placeholder="Filter by name...">
+            </div>
         </div>
+
     </div>
 
     <div class="row g-4">
+
         {% for recipe in recipes %}
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-4 recipe-item" data-name="{{ recipe.name|lower }}">
             <div class="card recipe-card shadow-sm">
                 <div class="img-container">
                     <span class="difficulty-pill diff-{{ recipe.difficulty }}">
@@ -85,6 +88,40 @@
             </div>
         </div>
         {% endfor %}
+
+        <div id="noResults" class="col-12 text-center py-5 d-none">
+            <h3 class="text-muted">No recipes match your filter.</h3>
+        </div>
+
     </div>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('recipeSearch').addEventListener('keyup', function() {
+        const query = this.value.toLowerCase();
+        const recipes = document.querySelectorAll('.recipe-item');
+        const noResults = document.getElementById('noResults');
+        let visibleCount = 0;
+
+        recipes.forEach(recipe => {
+            const name = recipe.getAttribute('data-name');
+            if (name.includes(query)) {
+                recipe.style.display = "block";
+                visibleCount++;
+            } else {
+                recipe.style.display = "none";
+            }
+        });
+
+        // Toggle the "No results" message based on the count
+        if (visibleCount === 0) {
+            noResults.classList.remove('d-none');
+        } else {
+            noResults.classList.add('d-none');
+        }
+    });
+</script>
+{% endblock %}
+
