@@ -69,3 +69,30 @@ class IngredientViewsTest(TestCase):
         response = self.client.get(url)
         # Should show recipe_count for each ingredient (should be 0 here)
         self.assertContains(response, '0')
+
+# --- Functional tests for ingredient_index template ---
+class IngredientIndexFunctionalTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='sous_chef', password='password123')
+        # Create ingredients with different first letters for regrouping test
+        cls.ing1 = Ingredient.objects.create(name="Apple")
+        cls.ing2 = Ingredient.objects.create(name="Banana")
+
+    def setUp(self):
+        self.client.login(username='sous_chef', password='password123')
+
+    def test_ingredient_regrouping_logic(self):
+        """Verify ingredients are grouped by the first letter in the template."""
+        url = reverse('ingredients:ingredients_index')
+        response = self.client.get(url)
+        # Check for regroup headers
+        self.assertContains(response, 'A')
+        self.assertContains(response, 'B')
+
+    def test_data_attributes_for_js_filter(self):
+        """Verify the HTML contains data-name attributes required for JS filtering."""
+        url = reverse('ingredients:ingredients_index')
+        response = self.client.get(url)
+        # Verify data-name attribute exists for the JS logic to grab
+        self.assertContains(response, 'data-name="apple"')

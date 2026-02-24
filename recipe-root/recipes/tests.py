@@ -1,10 +1,11 @@
 # recipes/tests.py
 from django.test import TestCase
-from .models import Recipe, RecipeIngredient
-from ingredients.models import Ingredient
 from django.urls import reverse
 from django.utils.html import escape
 from django.contrib.auth.models import User     # Added for auth testing
+from .models import Recipe, RecipeIngredient
+from ingredients.models import Ingredient
+from .forms import RecipeSearchForm
 
 # --- Models tests ---
 
@@ -134,3 +135,52 @@ class RecipeViewsTest(TestCase):
         response = self.client.get(url)
         detail_url = reverse('recipes:recipe_detail', args=[self.recipe1.pk])
         self.assertContains(response, escape(detail_url))
+
+class RecipeDataLabViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a user for authentication
+        cls.user = User.objects.create_user(username='lab_tech', password='password123')
+        # Create a recipe to ensure the search has data to process
+        cls.recipe = Recipe.objects.create(name="Pasta", cooking_time=20)
+
+    def setUp(self):
+        self.client.login(username='lab_tech', password='password123')
+
+    def test_data_lab_get_status_and_template(self):
+        """Verify the Data Lab page loads for authenticated users."""
+        url = reverse('recipes:recipes_search')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/recipes_search.html')
+
+    def test_data_lab_post_logic(self):
+        """Verify the search generates a dataframe and chart in context."""
+        url = reverse('recipes:recipes_search')
+        response = self.client.post(url, {
+            'recipe_name': 'Pasta',
+            'chart_type': '#1'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('recipes_df', response.context)
+        self.assertIn('chart', response.context)
+        # Verify the custom table formatting class is present in the output
+        self.assertContains(response, 'dataframe')
+
+# --- Forms tests ---
+class RecipeSearchFormTest(TestCase):
+    def test_form_renders_recipe_name_input(self):
+        """Verify the recipe_name and chart_type fields are present."""
+        form = RecipeSearchForm()
+        self.assertIn('recipe_name', form.fields)
+        self.assertIn('chart_type', form.fields)
+    
+    def test_form_valid_data(self):
+        """Test form with valid recipe name and a standard chart selection."""
+        form = RecipeSearchForm(data={'recipe_name': 'Tea', 'chart_type': '#1'})
+        self.assertTrue(form.is_valid())
+
+    def test_form_invalid_chart_type(self):
+        """Ensure the form rejects chart types not defined in choices."""
+        form = RecipeSearchForm(data={'recipe_name': 'Tea', 'chart_type': 'invalid_choice'})
+        self.assertFalse(form.is_valid())
