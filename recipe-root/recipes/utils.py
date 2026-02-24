@@ -21,14 +21,21 @@ def get_graph():
 def get_chart(chart_type, data, **kwargs):
     # Switch plot backend to Anti-Grain Geometry to avoid main thread issues
     plt.switch_backend('AGG')
-    fig = plt.figure(figsize=(6,3))
+    fig = plt.figure(figsize=(6,4))
+
+    # Truncate recipe names to 18 characters followed by '...'
+    truncated_names = [
+        (name[:18] + '...') if len(name) > 18 else name 
+        for name in data['name']
+    ]
 
     if chart_type == '#1':
         # Bar Chart: Cooking Time Comparison
-        plt.bar(data['name'], data['cooking_time'], color='#e67e22')
+        plt.bar(truncated_names, data['cooking_time'], color='#e67e22')
         #plt.xlabel('Recipe Name')
         plt.ylabel('Cooking Time (min)')
         plt.title('Cooking Time Comparison')
+        plt.xticks(rotation=45, ha='right')         # Tilt labels 45 degrees
 
     elif chart_type == '#2':
         # Pie Chart: Difficulty Distribution
@@ -41,11 +48,12 @@ def get_chart(chart_type, data, **kwargs):
         # Line Chart: Ingredients vs Time
         # We need the count of ingredients which is a ManyToMany relationship
         # This assumes 'ingredient_count' was added to the dataframe in the view
-        plt.plot(data['name'], data['cooking_time'], marker='o', label='Cooking Time')
-        plt.plot(data['name'], data['ingredient_count'], marker='s', label='Ingredient Count')
+        plt.plot(truncated_names, data['cooking_time'], marker='o', label='Cooking Time')
+        plt.plot(truncated_names, data['ingredient_count'], marker='s', label='Ingredient Count')
         #plt.xlabel('Recipes')
         plt.title('Complexity Trends')
         plt.legend()
+        plt.xticks(rotation=45, ha='right')         # Tilt labels 45 degrees
     
     plt.tight_layout()
     chart = get_graph()
