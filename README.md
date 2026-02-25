@@ -147,6 +147,61 @@ To verify the integrity of the models, views, and templates, run:
 python manage.py test
 ```
 
+## Codebase Audit (2026-02-24)
+
+This section summarizes a full manual review of the current codebase state.
+
+### Security Findings
+- **High**: `SECRET_KEY` is hardcoded in `settings.py`.
+    - **Risk**: key disclosure compromises session/csrf/signing security.
+    - **Recommendation**: load `SECRET_KEY` from environment variables.
+
+- **High**: `DEBUG = True` and empty `ALLOWED_HOSTS` in `settings.py`.
+    - **Risk**: sensitive debug output and improper host validation in production.
+    - **Recommendation**: make `DEBUG`/`ALLOWED_HOSTS` environment-driven and set secure defaults.
+
+- **Medium**: Search result links are built with raw string interpolation and rendered with `|safe`.
+    - **Risk**: recipe names can be used for XSS injection if malicious data enters database.
+    - **Recommendation**: generate links with Django-safe helpers (`format_html`) and keep untrusted content escaped.
+
+- **Low**: External link in base template opens with `target="_blank"` and no `rel` attributes.
+    - **Risk**: reverse tabnabbing.
+    - **Recommendation**: add `rel="noopener noreferrer"`.
+
+### Performance Findings
+- **Medium**: Search view loops through recipes and calls `obj.ingredients.count()` per row.
+    - **Impact**: additional DB queries (N+1 pattern) under larger datasets.
+    - **Recommendation**: use `prefetch_related('ingredients')` and derive counts from prefetched relations.
+
+- **Low**: DataFrame conversion in request path is expensive for large result sets.
+    - **Impact**: avoidable CPU/memory overhead.
+    - **Recommendation**: add pagination or maximum result cap for analysis pages.
+
+### Code Quality Findings
+- **Medium**: `Recipe.save()` calls `calculate_difficulty()`, and `calculate_difficulty()` calls `save()` again.
+    - **Impact**: recursive control flow is harder to reason about and maintain.
+    - **Recommendation**: calculate difficulty value first, then persist once with explicit update logic.
+
+- **Medium**: Search view reads raw POST values instead of validated `form.cleaned_data`.
+    - **Impact**: bypasses form-level normalization/validation semantics.
+    - **Recommendation**: rely on `form.is_valid()` and `cleaned_data`.
+
+- **Low**: Naming typo `CHART__CHOICES` in forms.
+    - **Impact**: readability/consistency issue.
+    - **Recommendation**: rename to `CHART_CHOICES`.
+
+### Dependency Review
+- `requirements.txt` is already pinned and currently does **not** require mandatory changes for this audit.
+- Optional tooling additions for ongoing quality/security:
+    - `ruff` (linting), `black` (formatting), `pip-audit` (dependency vulnerability checks).
+
+### Suggested Priority Order
+1. Move secrets/runtime security config to environment variables.
+2. Fix unsafe link rendering in search table output.
+3. Optimize search queryset loading (`prefetch_related`) and use `cleaned_data`.
+4. Refactor difficulty calculation/save flow for maintainability.
+5. Add CI checks (`lint + tests + audit`).
+
 ---
 
 *This project is maintained for educational and demonstration purposes.*
