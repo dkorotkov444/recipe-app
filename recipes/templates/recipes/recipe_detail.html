@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ recipe.name }} | Recipe Application{% endblock %}
 
@@ -8,7 +9,7 @@
     .recipe-header {
         height: 50vh;
         background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                    url('{% if recipe.image %}{{ recipe.image.url }}{% else %}/media/no_image.png{% endif %}');
+                    url("{% if recipe.image and recipe.image.name != 'no_image.png' %}{{ recipe.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}");
         background-size: cover;
         background-position: center;
         display: flex;
