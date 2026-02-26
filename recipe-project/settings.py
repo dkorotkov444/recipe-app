@@ -1,3 +1,4 @@
+# recipe-project/settings.py
 """
 Django settings for recipe-project project.
 
@@ -12,24 +13,39 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+import dj_database_url
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
+# Quick-start development settings are unsuitable for production.
+# Current settings are prepared for production.
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
+# Initialize django-environ
+env = environ.Env(
+    DEBUG=(bool, False)  # This tells environ: "DEBUG should be a boolean with a default of False if not set in .env"
+)
+
+# Tell Django where to find .env file. This "opens" the file so the variables can be used below.
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--hudpnx^_))j^bmu)w=)=_6%yl_8_%x2d%ne3q+a6xe!7_ak(g'
+# This pulls the REAL key from .env file
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-only-change-me') # <-- This default is just for development; make sure to set a real key in production!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# This will correctly see "DEBUG=True" in .env 
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+# env.list() reads the comma-separated string from .env and turns it into a Python list.
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 
 
-# Application definition
+# --- APPLICATION DEFINITION ---
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,16 +91,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'recipe-project.wsgi.application'
 
 
-# Database
+# --- DATABASE ---
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# This handles both local SQLite and Cloud Databases using the env object
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        # We now pull the URL through env() with the same SQLite fallback 
+        default=env('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
+# --- AUTHENTICATION ---
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -110,19 +131,19 @@ LOGIN_REDIRECT_URL = 'recipes:recipes_list'
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# --- STATIC FILES (CSS, JavaScript, Images) ---
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
