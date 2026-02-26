@@ -31,53 +31,52 @@ recipe-app/
 ├── .gitignore           # Git ignore rules
 ├── README.md            # This file
 ├── requirements.txt     # Python dependencies
-├── recipe-root/
-│   ├── db.sqlite3           # SQLite database for development
-│   ├── manage.py            # Django management script
-│   ├── cml-prototype/       # Legacy command-line version (archived)
-│   │   └── recipe_app.py
-│   ├── ingredients/         # Django app: ingredients
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   ├── views.py
-│   │   ├── urls.py
-│   │   ├── migrations/
-│   │   │   └── ...
-│   │   └── templates/
-│   │       └── ingredients/
-│   │           └── ingredients_index.html
-│   ├── media/               # User-uploaded media files
-│   │   └── recipes/
-│   ├── recipes/             # Django app: recipes
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── forms.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   ├── utils.py
-│   │   ├── views.py
-│   │   ├── migrations/
-│   │   │   └── ...
-│   │   └── templates/
-│   │       └── recipes/
-│   │           ├── recipes_list.html
-│   │           ├── recipe_detail.html
-│   │           └── recipes_search.html
-│   ├── recipe-project/      # Django project config
-│   │   ├── asgi.py
-│   │   ├── settings.py
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   ├── views.py
-│   │   └── wsgi.py
-│   └── templates/           # Project-level templates
-│       ├── base.html
-│       ├── home.html
-│       ├── login.html
-│       └── logout_success.html
+├── db.sqlite3           # SQLite database for development
+├── manage.py            # Django management script
+├── cml-prototype/       # Legacy command-line version (archived)
+│   └── recipe_app.py
+├── ingredients/         # Django app: ingredients
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── migrations/
+│   │   └── ...
+│   └── templates/
+│       └── ingredients/
+│           └── ingredients_index.html
+├── media/               # User-uploaded media files
+│   └── recipes/
+├── recipes/             # Django app: recipes
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── utils.py
+│   ├── views.py
+│   ├── migrations/
+│   │   └── ...
+│   └── templates/
+│       └── recipes/
+│           ├── recipes_list.html
+│           ├── recipe_detail.html
+│           └── recipes_search.html
+├── recipe-project/      # Django project config
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   └── wsgi.py
+└── templates/           # Project-level templates
+    ├── base.html
+    ├── home.html
+    ├── login.html
+    └── logout_success.html
 ```
 
 - The `recipes` and `ingredients` folders are Django apps with their own models, views, urls, templates, and migrations.
@@ -91,7 +90,7 @@ recipe-app/
 1.  **Clone the repository**:
     ```bash
     git clone <your-repository-url>
-    cd recipe-app/recipe-root
+    cd recipe-app
     ```
 
 2.  **Create and activate a virtual environment**:
