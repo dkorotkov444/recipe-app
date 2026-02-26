@@ -21,8 +21,6 @@ db.sqlite3-journal
 
 # Django-specific
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Media and Static
 # We ignore media because Heroku wipes it; we use static/img/recipes instead
