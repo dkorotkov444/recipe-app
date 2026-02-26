@@ -148,5 +148,7 @@ if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
+    # This ensures WhiteNoise can find the images in the collected static folder
     MEDIA_URL = '/static/img/'
+    # Keep this pointing to the source static folder so collectstatic picks them up
     MEDIA_ROOT = BASE_DIR / 'static' / 'img'

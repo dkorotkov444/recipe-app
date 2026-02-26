@@ -13,6 +13,11 @@ ENV/
 # Databases
 # (I don't want to track my local SQLite data)
 *.sqlite3
+db.sqlite3
+db.sqlite3-journal
+
+# Environment variables
+.env
 
 # Django-specific
 local_settings.py
@@ -20,8 +25,11 @@ db.sqlite3
 db.sqlite3-journal
 
 # Media and Static
+# We ignore media because Heroku wipes it; we use static/img/recipes instead
 media/
+# This is the folder Django creates on the server; don't track it
 staticfiles/
+# Note: Ensure we DO NOT have "static/" listed here. We want Git to track our static/img/recipes/ folder.
 
 # OS-specific
 .DS_Store
@@ -33,3 +41,5 @@ Thumbs.db
 # Text backup files
 *.bak
 *.tmp
+
+
